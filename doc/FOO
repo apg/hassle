@@ -1,0 +1,61 @@
+# Data layout
+
+Cell {
+  tw_int_t flags; 
+  tw_ptr_t hist; 
+  tw_ptr_t car; 
+  tw_ptr_t cdr; 
+}
+
+*** annoyance 1: wasting 64 bits for 6 needed bits.
+
+# How types map onto that layout.
+
+1. Symbols
+
+   Symbols have a cell layout:
+ 
+     flags = regular flags with SYM in the type position
+    
+
+
+/* Symbols are stored, sorted by their hashcode in a 
+   struct { data[N], spill[64] }. 
+
+   Then, symbols are interned first by hashing the data, then doing a
+   binary search[1] in the data[N] struct. On failure, if spill is filled
+   a linear search for the hashcode is done. 
+
+
+   
+*/
+
+symbol: {
+   flags: SYM
+   car: hash-of(cdr)
+   cdr: '\0' terminated c-str
+}
+
+closure: {
+   flags: CLO
+}
+
+
+
+
+
+
+
+ATOMS
+ - fixnum, flonum, symbol, string  
+
+COMPOUNDS
+ - cons, closure
+ - ^Kind. So, if cons and ^Kind, we now have a vtable to look up methods on.
+
+ - ^Str --- (^Str 96 97 98 99) -> "ABCD"
+ - 
+
+
+IO
+ - 

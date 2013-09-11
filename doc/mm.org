@@ -1,0 +1,38 @@
+#+Title: Memory Management
+
+* ORO (One reference only) as in newLISP. 
+  - Has many advantages
+    - recycle things really fast and make the space available quickly
+    - don't need to grow very big stacks
+    - deletes are a relink into the heap.
+  - Has many disadvantages
+    - requires copying objects
+    - no closures, since copying of values takes place
+    - have to, sometimes, use pass by reference to make it worthwhile.
+   
+** Can we add compaction? And, does forwarding a copy make sense? 
+  - Walk history list and copy top to bottom into to-space?
+    - Add forwaring pointers of course. 
+    - What gains do we get?
+
+** Can we ref count externally allocated memory so copying isn't so bad?
+  - Make strings immutable for this to work
+    - Allocate "str" as { char *str, int refs } 
+    - Then, popResultStack() decrements refs, and copying something containing a string incrs.
+    - Statically shared amongst copies. only a pointer to store, but we have an indirection...
+  - Could do this for closures too. 
+
+
+
+
+
+
+X - is a mark. 0 or ' ' is a clear
+
+[X] <-- 
+[ ]
+[ ]
+[ ]
+[ ]
+[ ]
+[ ]
